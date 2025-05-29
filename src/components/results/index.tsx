@@ -14,34 +14,31 @@ export default function Results({ diffResult }: Props) {
       </div>
       <div className="scrollbar max-h-[600px] overflow-auto">
         {diffResult.lines.map((line, index) => (
-          <DiffLineContent line={line} index={index} />
+          <DiffLineContent key={index} line={line} />
         ))}
       </div>
     </div>
   );
 }
 
-function DiffLineContent({ line, index }: { line: DiffLine; index: number }) {
+function DiffLineContent({ line }: { line: DiffLine }) {
   function getLineStyles() {
     switch (line.type) {
       case "added":
         return {
-          bg: "bg-green-950 hover:bg-green-900",
-          text: "text-green-200",
+          colors: "bg-green-950 text-green-200",
           prefix: "+",
           prefixColor: "text-green-400",
         };
       case "removed":
         return {
-          bg: "bg-red-950 hover:bg-red-900",
-          text: "text-red-200",
+          colors: "bg-red-950/60 text-red-200",
           prefix: "-",
           prefixColor: "text-red-400",
         };
       default:
         return {
-          bg: "bg-zinc-800 hover:bg-zinc-700",
-          text: "",
+          colors: "bg-zinc-800",
         };
     }
   }
@@ -49,7 +46,7 @@ function DiffLineContent({ line, index }: { line: DiffLine; index: number }) {
   const styles = getLineStyles();
 
   return (
-    <div key={index} className={`flex transition-colors ${styles.bg} ${styles.text}`}>
+    <div className={`flex transition-colors ${styles.colors}`}>
       <div className="min-w-12 flex-shrink-0 border-r border-zinc-700 bg-zinc-800 p-3 text-right font-mono text-xs text-zinc-400">
         {line.oldLineNumber || ""}
       </div>
@@ -60,7 +57,16 @@ function DiffLineContent({ line, index }: { line: DiffLine; index: number }) {
         {styles.prefix && (
           <span className={`${styles.prefixColor} mr-2 font-bold`}>{styles.prefix}</span>
         )}
-        <span className="whitespace-pre-wrap">{line.content}</span>
+        {line.isInlineDiff ? (
+          <span
+            className="whitespace-pre-wrap"
+            dangerouslySetInnerHTML={{ __html: line.content }}
+          />
+        ) : (
+          <span className={`whitespace-pre-wrap ${line.type === "removed" ? "line-through" : ""}`}>
+            {line.content}
+          </span>
+        )}
       </div>
     </div>
   );

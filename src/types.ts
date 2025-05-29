@@ -3,6 +3,7 @@ export interface DiffLine {
   content: string;
   oldLineNumber?: number;
   newLineNumber?: number;
+  isInlineDiff?: boolean;
 }
 
 export interface DiffResult {
