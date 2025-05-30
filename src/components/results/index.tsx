@@ -8,8 +8,8 @@ export default function Results({ diffResult }: Props) {
   return (
     <div className="font-mono text-sm">
       <div className="sticky top-0 flex border-b border-zinc-700 bg-zinc-900 text-xs font-bold">
-        <div className="min-w-12 border-r border-zinc-700 p-3 text-center">Old</div>
-        <div className="min-w-12 border-r border-zinc-700 p-3 text-center">New</div>
+        <div className="w-12 border-r border-zinc-700 p-3 text-center">Old</div>
+        <div className="w-12 border-r border-zinc-700 p-3 text-center">New</div>
         <div className="flex-1 p-3 px-4">Changes</div>
       </div>
       <div className="scrollbar max-h-[600px] overflow-auto">
@@ -47,10 +47,10 @@ function DiffLineContent({ line }: { line: DiffLine }) {
 
   return (
     <div className={`flex transition-colors ${styles.colors}`}>
-      <div className="min-w-12 flex-shrink-0 border-r border-zinc-700 bg-zinc-800 p-3 text-right font-mono text-xs text-zinc-400">
+      <div className="w-12 flex-shrink-0 border-r border-zinc-700 bg-zinc-800 p-3 text-right font-mono text-xs text-zinc-400">
         {line.oldLineNumber || ""}
       </div>
-      <div className="min-w-12 flex-shrink-0 border-r border-zinc-700 bg-zinc-800 p-3 text-right font-mono text-xs text-zinc-400">
+      <div className="w-12 flex-shrink-0 border-r border-zinc-700 bg-zinc-800 p-3 text-right font-mono text-xs text-zinc-400">
         {line.newLineNumber || ""}
       </div>
       <div className="flex-1 py-2 pr-5 pl-4 font-mono text-sm leading-relaxed">

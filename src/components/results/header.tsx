@@ -22,14 +22,14 @@ export default function ResultsHeader({ diffResult }: Props) {
             </div>
           )}
           {diffResult.stats.deletions > 0 && (
-            <div className="flex items-center justify-center gap-2 rounded-full bg-red-100 px-3 py-1 text-red-700">
+            <div className="flex items-center justify-center gap-1 rounded-full bg-red-100 px-3 py-1 text-red-700">
               <span className="size-2 rounded-full bg-red-600"></span>
               <span>-{diffResult.stats.deletions}</span>
               <span className="hidden md:inline-block">removed</span>
             </div>
           )}
           {diffResult.stats.unchanged > 0 && (
-            <div className="flex items-center justify-center gap-2 rounded-full bg-zinc-700 px-3 py-1">
+            <div className="flex items-center justify-center gap-1 rounded-full bg-zinc-700 px-3 py-1">
               <span className="size-2 rounded-full bg-zinc-200"></span>
               <span>{diffResult.stats.unchanged}</span>
               <span className="hidden md:inline-block">unchanged</span>

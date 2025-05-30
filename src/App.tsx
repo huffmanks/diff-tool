@@ -6,6 +6,7 @@ import Results from "./components/results";
 import ResultsHeader from "./components/results/header";
 import Textarea from "./components/textarea";
 import type { DiffLine, DiffResult } from "./types";
+import { calculateSimilarity } from "./utils";
 
 export default function App() {
   const [originalText, setOriginalText] = useState(
@@ -44,17 +45,14 @@ export default function App() {
         }
         i++;
       } else if (part.removed) {
-        // Check if next part is added and can be merged as inline diff
         const nextPart = i + 1 < lineDiff.length ? lineDiff[i + 1] : null;
 
         if (nextPart && nextPart.added && part.value.length === nextPart.value.length) {
-          // Try to create inline diffs for each line pair
           for (let j = 0; j < part.value.length; j++) {
             const removedLine = part.value[j];
             const addedLine = nextPart.value[j];
 
             if (calculateSimilarity(removedLine, addedLine) > 0.6) {
-              // Create inline diff
               const charDiff = Diff.diffSentences(removedLine, addedLine);
               let inlineContent = "";
 
@@ -79,7 +77,6 @@ export default function App() {
               totalAdditions++;
               totalDeletions++;
             } else {
-              // Lines are too different, treat as separate removed/added
               diffLines.push({
                 type: "removed",
                 content: removedLine,
@@ -101,9 +98,8 @@ export default function App() {
             newLineNumber++;
           }
 
-          i += 2; // Skip both current and next part as we've processed them
+          i += 2;
         } else {
-          // No matching added part, treat as pure removal
           for (const line of part.value) {
             diffLines.push({
               type: "removed",
@@ -117,7 +113,6 @@ export default function App() {
           i++;
         }
       } else {
-        // Unchanged lines
         for (const line of part.value) {
           diffLines.push({
             type: "unchanged",
@@ -142,41 +137,6 @@ export default function App() {
       },
     };
   }, []);
-
-  const calculateSimilarity = (str1: string, str2: string): number => {
-    if (str1 === str2) return 1;
-    if (str1.length === 0 || str2.length === 0) return 0;
-
-    const longer = str1.length > str2.length ? str1 : str2;
-    const shorter = str1.length > str2.length ? str2 : str1;
-
-    if (longer.length === 0) return 1;
-
-    const editDistance = levenshteinDistance(longer, shorter);
-    return (longer.length - editDistance) / longer.length;
-  };
-
-  const levenshteinDistance = (str1: string, str2: string): number => {
-    const matrix = Array(str2.length + 1)
-      .fill(null)
-      .map(() => Array(str1.length + 1).fill(null));
-
-    for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
-    for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
-
-    for (let j = 1; j <= str2.length; j++) {
-      for (let i = 1; i <= str1.length; i++) {
-        const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
-        matrix[j][i] = Math.min(
-          matrix[j][i - 1] + 1,
-          matrix[j - 1][i] + 1,
-          matrix[j - 1][i - 1] + cost
-        );
-      }
-    }
-
-    return matrix[str2.length][str1.length];
-  };
 
   const diffResult = useMemo(() => {
     if (!originalText && !modifiedText) return null;

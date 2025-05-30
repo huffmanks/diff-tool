@@ -1,5 +1,5 @@
 import { CheckIcon, CopyIcon, FileTextIcon } from "lucide-react";
-import { useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 
 interface Props {
   value: string;
@@ -10,6 +10,14 @@ interface Props {
 
 export default function Textarea({ value, onChange, placeholder, label }: Props) {
   const [isCopying, setIsCopying] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const lineNumbersRef = useRef<HTMLDivElement>(null);
+
+  function handleScroll() {
+    if (textareaRef.current && lineNumbersRef.current) {
+      lineNumbersRef.current.scrollTop = textareaRef.current.scrollTop;
+    }
+  }
 
   async function handleCopyToClipboard() {
     try {
@@ -46,13 +54,15 @@ export default function Textarea({ value, onChange, placeholder, label }: Props)
           </button>
         </div>
       </div>
-      <div className="flex h-80">
-        <LineNumbers content={value || ""} />
+      <div className="scrollbar relative flex h-80">
+        <LineNumbers ref={lineNumbersRef} content={value || ""} />
         <textarea
+          ref={textareaRef}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onScroll={handleScroll}
           placeholder={placeholder}
-          className="scrollbar flex-1 resize-none bg-zinc-800 py-3 pr-5 pl-3 font-mono text-sm leading-6 outline-none"
+          className="absolute top-0 right-0 bottom-0 left-14 z-10 resize-none bg-zinc-800 py-3 pr-5 pl-3 font-mono text-sm leading-6 outline-none"
           spellCheck={false}
           style={{ tabSize: 2 }}
         />
@@ -61,15 +71,20 @@ export default function Textarea({ value, onChange, placeholder, label }: Props)
   );
 }
 
-function LineNumbers({ content }: { content: string }) {
+const LineNumbers = forwardRef<HTMLDivElement, { content: string }>(({ content }, ref) => {
   const lines = content.split("\n");
   return (
-    <div className="min-w-12 border-r border-zinc-700 bg-zinc-800 p-3 select-none">
-      {lines.map((_, index) => (
-        <div key={index} className="text-right font-mono text-sm leading-6 text-zinc-400">
-          {index + 1}
+    <div ref={ref} className="h-80 overflow-hidden bg-zinc-800 py-3">
+      {lines.map((line, index) => (
+        <div key={index} className="flex pr-5">
+          <span className="inline-block w-14 border-r border-zinc-700 px-3 text-right font-mono text-sm leading-6 text-zinc-400">
+            {index + 1}
+          </span>
+          <span className="pointer-events-none -z-10 inline-block w-full pl-3 font-mono text-sm leading-6 opacity-0 select-none">
+            {line || "\u00A0"}
+          </span>
         </div>
       ))}
     </div>
   );
-}
+});
