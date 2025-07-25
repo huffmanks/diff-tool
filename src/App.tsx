@@ -9,12 +9,8 @@ import type { DiffLine, DiffResult } from "./types";
 import { calculateSimilarity } from "./utils";
 
 export default function App() {
-  const [originalText, setOriginalText] = useState(
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit.\nSequi asperiores ad iure repellendus inventore, quasi quidem totam corrupti exercitationem voluptatem error eius veniam magnam laboriosam blanditiis saepe autem nobis incidunt laudantium, facilis doloribus beatae sunt nemo.\nCumque error mollitia laborum tempore sapiente fugit saepe blanditiis similique fuga impedit, obcaecati beatae libero."
-  );
-  const [modifiedText, setModifiedText] = useState(
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit.\nDebitis aliquam quas voluptate nemo explicabo, tenetur eaque officiis quasi dicta aliquid vel eos molestias consequuntur, ab nisi soluta consequatur mollitia nulla consectetur molestiae illum recusandae excepturi.\nCumque error mollitia laborum tempore sapiente fugit saepe blanditiis similique fuga impedit, obcaecati beatae libero."
-  );
+  const [originalText, setOriginalText] = useState("");
+  const [modifiedText, setModifiedText] = useState("");
 
   const computeDiff = useCallback((original: string, changed: string): DiffResult => {
     const originalLines = original.split("\n");
@@ -151,12 +147,14 @@ export default function App() {
         <div className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
           <Textarea
             value={originalText}
+            setValue={setOriginalText}
             label="Original Text"
             placeholder="Paste your original text here..."
             onChange={setOriginalText}
           />
           <Textarea
             value={modifiedText}
+            setValue={setModifiedText}
             label="Modified Text"
             placeholder="Paste your modified text here..."
             onChange={setModifiedText}

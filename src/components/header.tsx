@@ -9,9 +9,7 @@ export default function Header() {
         </div>
         Diff Tool
       </h1>
-      <p className="text-zinc-300">
-        Compare text changes with smart, GitHub-style diff visualization
-      </p>
+      <p className="text-zinc-300">Compare text changes with side-by-side diff visualization.</p>
     </header>
   );
 }
