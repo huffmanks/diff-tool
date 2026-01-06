@@ -4,12 +4,12 @@
 /* Firefox */
 .scrollbar {
   scrollbar-width: auto;
-  scrollbar-color: #09090b transparent;
+  scrollbar-color: #fafafa transparent;
 }
 
 .scrollbar:hover,
 .scrollbar:active {
-  scrollbar-color: #18181a transparent;
+  scrollbar-color: #e6e7e8 transparent;
 }
 
 /* Chrome, Edge and Safari */
@@ -24,12 +24,57 @@
 
 .scrollbar::-webkit-scrollbar-thumb {
   background-clip: content-box;
-  background-color: #09090b;
+  background-color: #fafafa;
   border-radius: 50px;
   border: 6px solid transparent;
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover,
 .scrollbar::-webkit-scrollbar-thumb:active {
-  background-color: #18181a;
+  background-color: #e6e7e8;
+}
+
+#language-dropdown-btn-show {
+  anchor-name: --menu-anchor;
+}
+
+@position-try --br {
+  position-area: bottom span-right;
+}
+
+@position-try --tr {
+  position-area: top span-right;
+}
+
+#language-dropdown {
+  position-anchor: --menu-anchor;
+  position-area: bottom span-right;
+  position-try-fallbacks: --br, --tr;
+  inset-block: 2px;
+}
+
+@keyframes enter {
+  0% {
+    opacity: 0;
+    transform: translate3d(-1000px, -1000px, -1000px) scale3d(0.95, 0.95, 0.95) rotate(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1) rotate(0);
+  }
+}
+
+.popover-menu:popover-open {
+  animation: enter 0.15s ease 0s 1 normal both;
+}
+
+.diff-tailwindcss-wrapper[data-theme="dark"] .diff-style-root {
+  --diff-plain-content--: var(--color-zinc-900);
+  --diff-expand-content--: var(--color-zinc-800);
+  --diff-plain-lineNumber--: var(--color-zinc-800);
+  --diff-expand-lineNumber--: var(--color-zinc-800);
+  --diff-empty-content--: var(--color-zinc-800);
+
+  --diff-plain-lineNumber-color--: var(--color-zinc-300);
+  --diff-expand-lineNumber-color--: var(--color-zinc-300);
 }

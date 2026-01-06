@@ -1,16 +1,10 @@
-export interface DiffLine {
-  type: "added" | "removed" | "unchanged";
-  content: string;
-  oldLineNumber?: number;
-  newLineNumber?: number;
-  isInlineDiff?: boolean;
-}
+export type FormElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
-export interface DiffResult {
-  lines: DiffLine[];
-  stats: {
-    additions: number;
-    deletions: number;
-    unchanged: number;
+export type MinimalChangeEvent = {
+  target: {
+    name: string;
+    value: string | boolean;
+    type?: string;
+    checked?: boolean;
   };
-}
+};
